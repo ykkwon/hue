@@ -2555,10 +2555,15 @@ from notebook.conf import ENABLE_QUERY_BUILDER, ENABLE_QUERY_SCHEDULING, get_ord
             <!-- ko if: schedulerViewModelIsLoaded() && ! schedulerViewModel.coordinator.isDirty() && ! viewSchedulerId()-->
             <a data-bind="click: showSubmitPopup" href="javascript: void(0);">${ _('Start') }</a>
             <!-- /ko -->
+            <!-- ko if: schedulerViewModelIsLoaded() && ! schedulerViewModel.coordinator.isDirty() && viewSchedulerId()-->
+            ## And status == killed
+            <a data-bind="click: showSubmitPopup" href="javascript: void(0);">${ _('Restart') }</a>
+            <!-- /ko -->
             <!-- ko if: schedulerViewModelIsLoaded() && viewSchedulerId()-->
             <a data-bind="click: function() { huePubSub.publish('show.jobs.panel', viewSchedulerId()) }, clickBubble: false" href="javascript: void(0);">
               ${ _('View') }
             </a>
+            ${ _("[status]") }
           <!-- /ko -->
           <!-- /ko -->
           <br>

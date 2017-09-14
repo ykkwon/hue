@@ -513,7 +513,7 @@ from desktop.views import _ko
                 self.jobCount(data.jobs.length);
               }
               checkJobBrowserStatusIdx = window.setTimeout(checkJobBrowserStatus, JB_CHECK_INTERVAL_IN_MILLIS);
-            }).fail(function () {
+          }).fail(function () {
             window.clearTimeout(checkJobBrowserStatusIdx);
           });
         };
