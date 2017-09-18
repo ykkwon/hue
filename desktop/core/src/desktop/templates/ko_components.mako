@@ -503,8 +503,9 @@ from desktop.views import _ko
         self.onePageViewModel = params.onePageViewModel;
 
         var lastYarnBrowserRequest = null;
-        var checkYARNBrowserStatus = function() {
-/**          if (lastYarnBrowserRequest !== null && lastYarnBrowserRequest.readyState < 4) {
+        var checkYarnBrowserStatus = function() {
+          /**
+          if (lastYarnBrowserRequest !== null && lastYarnBrowserRequest.readyState < 4) {
             return;
           }
           window.clearTimeout(checkJobBrowserStatusIdx);
@@ -535,6 +536,7 @@ from desktop.views import _ko
             },
             function(data) {
               if (data != null && data.total != null) {
+                huePubSub.publish('jobbrowser.schedule.data', data.apps);
                 self.jobCounts()['schedules'] = data.total;
                 self.jobCounts.valueHasMutated();
               }
@@ -542,20 +544,11 @@ from desktop.views import _ko
         };
 
         var checkJobBrowserStatus = function() {
-          lastYarnBrowserRequest = checkYARNBrowserStatus();
+          lastYarnBrowserRequest = checkYarnBrowserStatus();
           lastScheduleBrowserRequest = checkScheduleBrowserStatus();
 
           $.when.apply($, [lastYarnBrowserRequest, lastScheduleBrowserRequest])
           .done(function () {
-            if (arguments[0] instanceof Array) {
-              for (var i = 0; i < arguments.length; i++) {
-                if (i == 0) {
-                  //console.log(arguments[i][0].jobs); // Need to migrate to new API and update check.job.browse publisher
-                } else {
-                  //console.log(arguments[i][0].total);
-                }
-              }
-            }
             checkJobBrowserStatusIdx = window.setTimeout(checkJobBrowserStatus, JB_CHECK_INTERVAL_IN_MILLIS);
            })
           .fail(function () {
@@ -579,7 +572,8 @@ from desktop.views import _ko
 
         var checkJobBrowserStatusIdx = window.setTimeout(checkJobBrowserStatus, 10);
 
-        huePubSub.subscribe('check.job.browser', checkYARNBrowserStatus);
+        huePubSub.subscribe('check.job.browser', checkYarnBrowserStatus);
+        huePubSub.subscribe('check.schedules.browser', checkScheduleBrowserStatus);
       };
 
       ko.components.register('hue-job-browser-links', {
