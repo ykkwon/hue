@@ -5829,6 +5829,7 @@
           });
 
           element.innerHTML = '<div class="ace_editor ace-hue"><div class="ace_layer" style="position: static;">' + res.join('') + '</div></div>';
+          $(element).find('.ace_invisible_space').remove();
         });
       }
 
